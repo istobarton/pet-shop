@@ -25,15 +25,18 @@ PetShopWindow.signIn = function(username, password){
     xhr.setRequestHeader("Content-Type", "application/json");
   }
 
-  debugger;
-
-  var output = m.request({
+  return m.request({
     method: 'POST',
     url: 'http://pet-shop.api.mks.io/signin',
     config: xhrConfig,
     data: { "username": username, "password": password},
   })
 
+}
+
+PetShopWindow.userInfo = function(access){
+  var info = access;
+  return info;
 }
 
 
@@ -48,6 +51,7 @@ PetShopWindow.controller = function () {
 
   ctrl.username = m.prop(null)
   ctrl.password = m.prop(null)
+  ctrl.userInfo = m.prop(null)
 
   ctrl.signUp = function () {
     debugger;
@@ -56,7 +60,10 @@ PetShopWindow.controller = function () {
 
   ctrl.signIn = function () {
     debugger;
-    PetShopWindow.signIn(ctrl.username(), ctrl.password())
+    PetShopWindow.signIn(ctrl.username(), ctrl.password()).then(ctrl.userInfo).then(function(){
+      PetShopWindow.userInfo(ctrl.userInfo())
+    })
+    debugger;
   }
 
 }
@@ -68,23 +75,14 @@ PetShopWindow.view = function (ctrl) {
     m('h1', "Welcome to " + ctrl.shop().name + " Delicacies!"),
     m('fieldset',  [
       m('div', [
-        m('legend', "Sign Up"),
         m('label', "Name:"),
         m('input[type=text]', {oninput: m.withAttr("value", ctrl.username), value: ctrl.username()}),
         m('br'),
         m('label', "Password:"),
         m('input[type=text]', {oninput: m.withAttr("value", ctrl.password), value: ctrl.password()}),
-        m('button', { onclick: ctrl.signUp })
+        m('button', { onclick: ctrl.signUp }, 'Sign Up'),
+        m('button', { onclick: ctrl.signIn }, 'Sign In')
       ]),
-      m('div', [
-        m('legend', "Sign In"),
-        m('label', "Name:"),
-        m('input[type=text]', {onchange: m.withAttr("value", ctrl.username), value: ctrl.username()}),
-        m('br'),
-        m('label', "Password:"),
-        m('input[type=text]',  {onchange: m.withAttr("value", ctrl.password), value: ctrl.password()}),
-        m('button', { onclick: ctrl.signIn })
-      ])
     ]),
 
     ctrl.petShop().map(function(pet){
