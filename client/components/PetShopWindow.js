@@ -12,8 +12,8 @@ PetShopWindow.signUp = function(username, password){
   var xhrConfig = function(xhr) {
     xhr.setRequestHeader("Content-Type", "application/json");
   }
-  return m.request({ 
-    method: 'POST', 
+  return m.request({
+    method: 'POST',
     url: 'http://pet-shop.api.mks.io/signup',
     config: xhrConfig,
     data: { "username": username, "password": password},
@@ -27,8 +27,8 @@ PetShopWindow.signIn = function(username, password){
 
   debugger;
 
-  var output = m.request({ 
-    method: 'POST', 
+  var output = m.request({
+    method: 'POST',
     url: 'http://pet-shop.api.mks.io/signin',
     config: xhrConfig,
     data: { "username": username, "password": password},
@@ -42,13 +42,13 @@ PetShopWindow.controller = function () {
   var ctrl = this
   ctrl.shop = m.prop(null)
   Shop.fetch().then(ctrl.shop)
-  
+
   ctrl.petShop = m.prop(null)
   PetShopWindow.fetch().then(ctrl.petShop)
 
   ctrl.username = m.prop(null)
   ctrl.password = m.prop(null)
-  
+
   ctrl.signUp = function () {
     debugger;
     PetShopWindow.signUp(ctrl.username(), ctrl.password())
@@ -68,7 +68,7 @@ PetShopWindow.view = function (ctrl) {
     m('h1', "Welcome to " + ctrl.shop().name + " Delicacies!"),
     m('fieldset',  [
       m('div', [
-        m('legend', "Sign In"),
+        m('legend', "Sign Up"),
         m('label', "Name:"),
         m('input[type=text]', {oninput: m.withAttr("value", ctrl.username), value: ctrl.username()}),
         m('br'),
@@ -77,7 +77,7 @@ PetShopWindow.view = function (ctrl) {
         m('button', { onclick: ctrl.signUp })
       ]),
       m('div', [
-        m('legend', "Sign Up"),
+        m('legend', "Sign In"),
         m('label', "Name:"),
         m('input[type=text]', {onchange: m.withAttr("value", ctrl.username), value: ctrl.username()}),
         m('br'),
