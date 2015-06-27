@@ -8,16 +8,58 @@ PetShopWindow.fetch = function(){
   return m.request({ method: 'GET', url: 'http://pet-shop.api.mks.io/shops/1/pets'})
 }
 
+PetShopWindow.signUp = function(username, password){
+  var xhrConfig = function(xhr) {
+    xhr.setRequestHeader("Content-Type", "application/json");
+  }
+  return m.request({ 
+    method: 'POST', 
+    url: 'http://pet-shop.api.mks.io/signup',
+    config: xhrConfig,
+    data: { "username": username, "password": password},
+  })
+}
+
+PetShopWindow.signIn = function(username, password){
+  var xhrConfig = function(xhr) {
+    xhr.setRequestHeader("Content-Type", "application/json");
+  }
+
+  debugger;
+
+  var output = m.request({ 
+    method: 'POST', 
+    url: 'http://pet-shop.api.mks.io/signin',
+    config: xhrConfig,
+    data: { "username": username, "password": password},
+  })
+
+}
+
+
+
 PetShopWindow.controller = function () {
   var ctrl = this
   ctrl.shop = m.prop(null)
   Shop.fetch().then(ctrl.shop)
+  
   ctrl.petShop = m.prop(null)
   PetShopWindow.fetch().then(ctrl.petShop)
 
+  ctrl.username = m.prop(null)
+  ctrl.password = m.prop(null)
+  
+  ctrl.signUp = function () {
+    debugger;
+    PetShopWindow.signUp(ctrl.username(), ctrl.password())
+  }
+
+  ctrl.signIn = function () {
+    debugger;
+    PetShopWindow.signIn(ctrl.username(), ctrl.password())
+  }
 
 }
-
 
 
 PetShopWindow.view = function (ctrl) {
@@ -28,20 +70,20 @@ PetShopWindow.view = function (ctrl) {
       m('div', [
         m('legend', "Sign In"),
         m('label', "Name:"),
-        m('input[type=text]'),
+        m('input[type=text]', {oninput: m.withAttr("value", ctrl.username), value: ctrl.username()}),
         m('br'),
         m('label', "Password:"),
-        m('input[type=text]' ),
-        m('button', "MMMM! Feed me more cute!")
+        m('input[type=text]', {oninput: m.withAttr("value", ctrl.password), value: ctrl.password()}),
+        m('button', { onclick: ctrl.signUp })
       ]),
       m('div', [
         m('legend', "Sign Up"),
         m('label', "Name:"),
-        m('input[type=text]'),
+        m('input[type=text]', {onchange: m.withAttr("value", ctrl.username), value: ctrl.username()}),
         m('br'),
         m('label', "Password:"),
-        m('input[type=text]' ),
-        m('button', "Let me feast on your Pets!")
+        m('input[type=text]',  {onchange: m.withAttr("value", ctrl.password), value: ctrl.password()}),
+        m('button', { onclick: ctrl.signIn })
       ])
     ]),
 
@@ -56,6 +98,11 @@ PetShopWindow.view = function (ctrl) {
   ])
 
 }
+
+/*
+m("input", {onchange: m.withAttr("value", todo.vm.description), value: todo.vm.description()}),
+m("button", {onclick: todo.vm.add}, "Add"),*/
+
 /*
 ctrl.petShop().map(function (){
   return
